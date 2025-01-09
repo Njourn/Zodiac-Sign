@@ -5,34 +5,47 @@ document.getElementById('zodiacForm').addEventListener('submit', function(event)
     const month = birthdate.getMonth() + 1; // Months are 0-based
     const day = birthdate.getDate();
 
-    const zodiac = getZodiacSign(day, month);
-    document.getElementById('result').innerHTML = `<h2>Your Zodiac Sign: ${zodiac}</h2>`;
+    const zodiacInfo = getZodiacSign(day, month);
+    displayZodiac(zodiacInfo);
 });
 
 function getZodiacSign(day, month) {
-    if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) {
-        return "Aquarius";
-    } else if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) {
-        return "Pisces";
-    } else if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) {
-        return "Aries";
-    } else if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) {
-        return "Taurus";
-    } else if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) {
-        return "Gemini";
-    } else if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) {
-        return "Cancer";
-    } else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) {
-        return "Leo";
-    } else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) {
-        return "Virgo";
-    } else if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) {
-        return "Libra";
-    } else if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) {
-        return "Scorpio";
-    } else if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) {
-        return "Sagittarius";
-    } else if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) {
-        return "Capricorn";
+    const zodiacSigns = [
+        { name: "Aquarius", icon: "icons/aquarius.png", start: "01-20", end: "02-18" },
+        { name: "Pisces", icon: "icons/pisces.png", start: "02-19", end: "03-20" },
+        { name: "Aries", icon: "icons/aries.png", start: "03-21", end: "04-19" },
+        { name: "Taurus", icon: "icons/taurus.png", start: "04-20", end: "05-20" },
+        { name: "Gemini", icon: "icons/gemini.png", start: "05-21", end: "06-20" },
+        { name: "Cancer", icon: "icons/cancer.png", start: "06-21", end: "07-22" },
+        { name: "Leo", icon: "icons/leo.png", start: "07-23", end: "08-22" },
+        { name: "Virgo", icon: "icons/virgo.png", start: "08-23", end: "09-22" },
+        { name: "Libra", icon: "icons/libra.png", start: "09-23", end: "10-22" },
+        { name: "Scorpio", icon: "icons/scorpio.png", start: "10-23", end: "11-21" },
+        { name: "Sagittarius", icon: "icons/sagittarius.png", start: "11-22", end: "12-21" },
+        { name: "Capricorn", icon: "icons/capricorn.png", start: "12-22", end: "01-19" }
+    ];
+
+    for (let sign of zodiacSigns) {
+        const [startMonth, startDay] = sign.start.split("-").map(Number);
+        const [endMonth, endDay] = sign.end.split("-").map(Number);
+
+        if (
+            (month === startMonth && day >= startDay) ||
+            (month === endMonth && day <= endDay)
+        ) {
+            return sign;
+        }
     }
+
+    return zodiacSigns[11]; // Default to Capricorn if no match
+}
+
+function displayZodiac(zodiacInfo) {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = `
+        <div class="zodiac-result">
+            <img src="${zodiacInfo.icon}" alt="${zodiacInfo.name}">
+            <h2>${zodiacInfo.name}</h2>
+        </div>
+    `;
 }
